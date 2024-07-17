@@ -1,0 +1,140 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Student {
+    private String name;
+    private int rollNumber;
+    private String grade;
+
+    public Student(String name, int rollNumber, String grade) {
+        this.name = name;
+        this.rollNumber = rollNumber;
+        this.grade = grade;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getRollNumber() {
+        return rollNumber;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    @Override
+    public String toString() {
+        return "Name: " + name + ", Roll Number: " + rollNumber + ", Grade: " + grade;
+    }
+}
+
+class StudentManagementSystem {
+    private ArrayList<Student> students;
+
+    public StudentManagementSystem() {
+        students = new ArrayList<>();
+    }
+
+    public void addStudent(Student student) {
+        students.add(student);
+    }
+
+    public void removeStudent(int rollNumber) {
+        for (Student student : students) {
+            if (student.getRollNumber() == rollNumber) {
+                students.remove(student);
+                return;
+            }
+        }
+    }
+
+    public Student searchStudent(int rollNumber) {
+        for (Student student : students) {
+            if (student.getRollNumber() == rollNumber) {
+                return student;
+            }
+        }
+        return null;
+    }
+
+    public void displayAllStudents() {
+        for (Student student : students) {
+            System.out.println(student.toString());
+        }
+    }
+
+    public void saveStudentsToFile(String filename) {
+        // Implement file writing logic here
+    }
+
+    public void loadStudentsFromFile(String filename) {
+        // Implement file reading logic here
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        StudentManagementSystem sms = new StudentManagementSystem();
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("Student Management System");
+            System.out.println("1. Add a new student");
+            System.out.println("2. Edit an existing student's information");
+            System.out.println("3. Search for a student");
+            System.out.println("4. Display all students");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter student name: ");
+                    String name = scanner.next();
+                    System.out.print("Enter roll number: ");
+                    int rollNumber = scanner.nextInt();
+                    System.out.print("Enter grade: ");
+                    String grade = scanner.next();
+                    Student student = new Student(name, rollNumber, grade);
+                    sms.addStudent(student);
+                    break;
+                case 2:
+                    System.out.print("Enter roll number of student to edit: ");
+                    int editRollNumber = scanner.nextInt();
+                    Student editStudent = sms.searchStudent(editRollNumber);
+                    if (editStudent != null) {
+                        System.out.print("Enter new grade: ");
+                        String newGrade = scanner.next();
+                        editStudent.setGrade(newGrade);
+                    } else {
+                        System.out.println("Student not found");
+                    }
+                    break;
+                case 3:
+                    System.out.print("Enter roll number of student to search: ");
+                    int searchRollNumber = scanner.nextInt();
+                    Student searchStudent = sms.searchStudent(searchRollNumber);
+                    if (searchStudent != null) {
+                        System.out.println(searchStudent.toString());
+                    } else {
+                        System.out.println("Student not found");
+                    }
+                    break;
+                case 4:
+                    sms.displayAllStudents();
+                    break;
+                case 5:
+                    System.out.println("Exiting...");
+                    return;
+                default:
+                    System.out.println("Invalid choice");
+            }
+        }
+    }
+}
